@@ -1,18 +1,25 @@
 #!/usr/bin/python3
 
 import socket
+from scapy.all import *
 
-HOST = '0.0.0.0'  # Standard loopback interface address (localhost)
-PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
+import converter
+import randomizer
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-  s.bind((HOST, PORT))
-  s.listen()
-  conn, addr = s.accept()
-  with conn:
-    print('Connected by', addr)
-    while True:
-      data = conn.recv(1024)
-      if not data:
-        break
-      conn.sendall(data)
+if __name__ == "__main__":
+  HOST = '0.0.0.0'  # Standard loopback interface address (localhost)
+  PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
+
+  converter.ip_vec_to_pkt(randomizer.new_ip_vec()).show()
+
+  # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+  #   s.bind((HOST, PORT))
+  #   s.listen()
+  #   conn, addr = s.accept()
+  #   with conn:
+  #     print('Connected by', addr)
+  #     while True:
+  #       data = conn.recv(1024)
+  #       if not data:
+  #         break
+  #       conn.sendall(data)
