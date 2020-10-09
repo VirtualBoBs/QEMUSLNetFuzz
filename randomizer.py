@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import random
+import config
+import converter
 
 def new_ip_vec():
   # fields
@@ -12,13 +14,13 @@ def new_ip_vec():
   frag = 0 if random.random() < 0.9 else random.randint(0, 2**13-1)
   ttl = 64 if random.random() < 0.9 else random.randint(0, 2**8-1)
   proto = 0x0 if random.random() < 0.9 else random.randint(0, 2**8-1)
-  options = b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, 1500-24))))
+  options = b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, config.MTU-24))))
   return (ihl, tos, _len, _id, flags, frag, ttl, proto, options)
 
-def new_tcp_vec():
+def new_tcp_vec(hlen): # gets header length of ip
   # fields
   sport = random.randint(0, 2**16-1)
-  dport = random.choice([20, 21, 23, 80, 513, 544, 543, 6667, 6668, 7070, 113]) if random.random() < 0.9 else random.randint(0, 2**16-1)
+  dport = random.choice(config.protos) if random.random() < 0.9 else random.randint(0, 2**16-1)
   seq = 0 if random.random() < 0.9 else random.randint(0, 2**32-1)
   ack = 0 if random.random() < 0.9 else random.randint(0, 2**32-1)
   dataofs = None if random.random() < 0.9 else random.randint(0, 2**4-1)
@@ -26,15 +28,15 @@ def new_tcp_vec():
   flags = 2 if random.random() < 0.9 else random.randint(0, 2**9-1)
   window = 8192 if random.random() < 0.9 else random.randint(0, 2**16-1)
   urgptr = 0 if random.random() < 0.9 else random.randint(0, 2**16-1)
-  options = b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, 1500-24-20))))
+  options = b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, config.MTU-hlen-20))))
   return (sport, dport, seq, ack, dataofs, reserved, flags, window, urgptr, options)
 
 def new_udp_vec():
   # fields
   sport = random.randint(0, 2**16-1)
-  dport = random.choice([20, 21, 23, 80, 513, 544, 543, 6667, 6668, 7070, 113]) if random.random() < 0.9 else random.randint(0, 2**16-1)
+  dport = random.choice(config.protos) if random.random() < 0.9 else random.randint(0, 2**16-1)
   _len = None if random.random() < 0.9 else random.randint(0, 2**16-1)
   return (sport, dport, _len)
 
 def new_raw(hlen): # gets header length
-  return b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, 1500-hlen))))
+  return b"" if random.random() < 0.9 else bytes(bytearray(random.getrandbits(8) for _ in range(random.randint(0, config.MTU-hlen))))
