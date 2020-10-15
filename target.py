@@ -21,6 +21,10 @@ if __name__ == "__main__":
         data = conn.recv(1024)
         if not data:
           break
+        
+        # if len(data) % 1024 == 0
+        if data == b"over":
+          break
 
         pcap_data += data
 

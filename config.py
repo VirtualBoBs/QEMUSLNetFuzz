@@ -9,8 +9,8 @@ INTERFACE_NAME = "ens3"
 MTU = 1500
 
 # gen info
-PKT_SIZE = 10 # packet size
-PKT_TYPE = "tcp"
+PKT_SIZE = 100 # packet size
+PKT_TYPE = "ip"
 
 # debug info
 DEBUG=True

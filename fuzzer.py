@@ -33,12 +33,15 @@ if __name__ == "__main__":
           print("file length :", len(cur_data))
 
         try:
-          conn.sendall(cur_data)
+          if len(cur_data) % 1024 != 0:
+            conn.sendall(cur_data)
+          else:
+            conn.sendall(cur_data + b"over")
 
           if config.DEBUG:
             print("Sending file done")
 
-          while conn.recv(1024) != b"NXT":
+          if conn.recv(1024):
             continue
         except KeyboardInterrupt:
           break
