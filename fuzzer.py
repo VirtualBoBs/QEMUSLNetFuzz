@@ -2,6 +2,7 @@
 
 import socket
 import subprocess
+import random
 
 import config
 
@@ -23,7 +24,10 @@ if __name__ == "__main__":
           print("running file")
 
         # generate file
-        subprocess.run(["randpkt", "-c", str(config.PKT_SIZE), "-b", str(config.MTU), "-t", config.PKT_TYPE, "cur.pcap"])
+        if config.PKT_TYPE == "rnd":
+          subprocess.run(["randpkt", "-c", str(config.PKT_SIZE), "-b", str(config.MTU), "-t", random.choice(["ip", "tcp", "udp", "dns", "sctp", "icmp"]), "cur.pcap"])
+        else:
+          subprocess.run(["randpkt", "-c", str(config.PKT_SIZE), "-b", str(config.MTU), "-t", config.PKT_TYPE, "cur.pcap"])
 
         cur_data = b""
         with open("cur.pcap", "rb") as f:

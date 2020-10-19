@@ -10,7 +10,7 @@ MTU = 1500
 
 # gen info
 PKT_SIZE = 100 # packet size
-PKT_TYPE = "ip"
+PKT_TYPE = "rnd"
 
 # debug info
 DEBUG=True
